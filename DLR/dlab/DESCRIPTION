@@ -10,6 +10,19 @@ License: GPL-3
 Encoding: UTF-8
 LazyData: true
 Suggests: 
-    testthat
+    testthat,
+    knitr,
+    rmarkdown
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 6.1.1
+Remotes:
+    git::https://github.com/dyerlab/gstudio.git,
+    git::https://github.com/dyerlab/popgraph.git
+Imports: 
+    ggplot2,
+    dplyr,
+    gstudio,
+    popgraph,
+    RPostgreSQL,
+    rpostgis
+VignetteBuilder: knitr
