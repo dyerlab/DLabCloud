@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"os"
 	"strconv"
+	"strings"
 
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -63,7 +64,12 @@ func main() {
 	statement, _ = db.Prepare("CREATE TABLE IF NOT EXISTS individuals (id INTEGER, population TEXT, country TEXT, region TEXT, sex TEXT)")
 	statement.Exec()
 	statement, _ = db.Prepare("INSERT INTO individuals (id, population, country, region, sex) VALUES (?,?,?,?,?)")
-	for i := 4; i < len(csvData); i += 2 {
+	for i := 5; i < (len(csvData) - 1); i += 2 {
+
+		if csvData[i][0] != csvData[(i + 1)][0] {
+			panic("individual syncing is out of whack.  ID's do not match on subsequent line")
+		}
+
 		statement.Exec(i, csvData[i][2], csvData[i][3], csvData[i][4], csvData[i][6])
 		fmt.Print(".")
 		if (i-4)%100 == 0 && i != 4 {
@@ -109,24 +115,25 @@ func main() {
 
 		Ae := 0.0
 		if freq["A"] > 0 {
-			Ae += 1.0 / (freq["A"] * freq["A"])
+			Ae += (freq["A"] * freq["A"])
 		}
 		if freq["T"] > 0 {
-			Ae += 1.0 / (freq["T"] * freq["T"])
+			Ae += (freq["T"] * freq["T"])
 		}
 		if freq["C"] > 0 {
-			Ae += 1.0 / (freq["C"] * freq["C"])
+			Ae += (freq["C"] * freq["C"])
 		}
 		if freq["G"] > 0 {
-			Ae += 1.0 / (freq["G"] * freq["G"])
+			Ae += (freq["G"] * freq["G"])
 		}
+
+		Ae = 1.0 / Ae
 
 		Ho = Ho / (N / 2.0)
 		He := 1.0 - (freq["A"]*freq["A"] + freq["T"]*freq["T"] + freq["G"]*freq["G"] + freq["C"]*freq["C"])
 
-		fmt.Println(csvData[0][j-7], freq["A"], freq["T"], freq["G"], freq["C"], Ae, Ho, He, genos)
-
-		statement.Exec(csvData[0][j-7], freq["A"], freq["T"], freq["G"], freq["C"], Ae, Ho, He, genos)
+		genotypes := strings.Join(genos[:], ",")
+		statement.Exec(csvData[0][j-7], freq["A"], freq["T"], freq["G"], freq["C"], Ae, Ho, He, genotypes)
 
 		fmt.Print(".")
 		if (j-7)%100 == 0 && (j-7) != 0 {
