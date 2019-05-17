@@ -5,22 +5,17 @@ import (
 	"log"
 	"net/http"
 	"runtime/debug"
-	"text/template"
+
+	"github.com/dyerlab/DLabCloud/pkg/manuscript"
+	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/postgres"
 )
 
 type application struct {
+	DB       *gorm.DB
 	errorLog *log.Logger
 	infoLog  *log.Logger
-}
-
-func (app *application) routes() *http.ServeMux {
-	mux := http.NewServeMux()
-	mux.HandleFunc("/", app.home)
-
-	fileServer := http.FileServer(http.Dir("./ui/static/"))
-	mux.Handle("/static/", http.StripPrefix("/static", fileServer))
-
-	return mux
+	articles *manuscript.Model
 }
 
 /**********    Server Error Reporting ***************/
@@ -36,28 +31,4 @@ func (app *application) clientError(w http.ResponseWriter, status int) {
 
 func (app *application) notFoundError(w http.ResponseWriter) {
 	app.clientError(w, http.StatusNotFound)
-}
-
-/************   SERVER Routing *******************/
-func (app *application) home(w http.ResponseWriter, r *http.Request) {
-	if r.URL.Path != "/" {
-		http.NotFound(w, r)
-		return
-	}
-
-	files := []string{
-		"./ui/html/graph.page.tmpl",
-		//		"./ui/html/base.layout.tmpl",
-		//		"./ui/html/navbar.partial.tmpl",
-	}
-
-	ts, err := template.ParseFiles(files...)
-	if err != nil {
-		app.serverError(w, err)
-	}
-
-	err = ts.Execute(w, nil)
-	if err != nil {
-		app.serverError(w, err)
-	}
 }

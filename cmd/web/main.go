@@ -6,6 +6,9 @@ import (
 	"log"
 	"net/http"
 	"os"
+
+	"github.com/dyerlab/DLabCloud/pkg/manuscript"
+	"github.com/jinzhu/gorm"
 )
 
 var logo = "" +
@@ -24,9 +27,17 @@ func main() {
 
 	iLog := log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime)
 	eLog := log.New(os.Stderr, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile)
+
+	db, err := gorm.Open("postgres", "host=localhost port=5432 user=rodney dbname=dlab password=bob sslmode=disable")
+	if err != nil {
+		eLog.Fatal(err)
+	}
+	defer db.Close()
+
 	app := application{
 		errorLog: eLog,
 		infoLog:  iLog,
+		articles: &manuscript.Model{DB: db},
 	}
 
 	srv := &http.Server{
@@ -36,6 +47,6 @@ func main() {
 	}
 
 	iLog.Printf("Starting at address %s", *addr)
-	err := srv.ListenAndServe()
+	err = srv.ListenAndServe()
 	eLog.Fatal(err)
 }

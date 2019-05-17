@@ -1,0 +1,395 @@
+<html>
+  <head>
+    <title>DLabCloud - Home</title>
+    <script type="text/javascript" src="/static/js/d3/d3.js"></script>
+    <style type="text/css">
+      .links line {
+        stroke: #999;
+        stroke-opacity: 0.6;
+      }
+      .nodes circle {
+        stroke: #fff;
+        stroke-width: 1.5px;
+      }
+      svg {
+        border: 1px;
+        border-color: #ccc;
+      }
+      .svg-container {
+        display: inline-block;
+        position: relative;
+        width: 80%;
+        padding-bottom: 30%;
+        vertical-align: top;
+        overflow: hidden;
+      }
+      .svg-content {
+        display: inline-block;
+        position: absolute;
+        top: 0;
+        left: 0;
+        border: 1px #999;
+      }
+    </style>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="DLabCloud.io lab management interface" />
+    <meta name="author" content="RJ Dyer" />
+    <!-- Bootstrap core CSS -->
+    <link
+      href="https://getbootstrap.com/docs/3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link
+      href="https://getbootstrap.com/docs/3.3/assets/css/ie10-viewport-bug-workaround.css"
+      rel="stylesheet"
+    />
+    <!-- Custom styles for this template -->
+    <link
+      href="https://getbootstrap.com/docs/3.3/examples/starter-template/starter-template.css"
+      rel="stylesheet"
+    />
+    <script src="https://getbootstrap.com/docs/3.3/assets/js/ie-emulation-modes-warning.js"></script>
+  </head>
+  <body>
+    {{define "homeActive"}}<a class="navbar-brand active" href="/">DLabCloud.io</a>{{end}}
+    {{template "navbar" .}}
+    <div class="container">
+      <div class="row">
+        <div id="container" class="svg-container">
+          <svg preserveAspectRatio="xMidYMid meet"></svg>
+        </div>
+
+        <script type="text/javascript">
+          //Width and height
+          var w = 960;
+          var h = 600;
+
+          //Original data
+          var dataset = {
+            nodes: [
+              {
+                name: "BaC",
+                size: 12.15881,
+                color: "#FDAE61",
+                Region: "Baja",
+                group: "All"
+              },
+              {
+                name: "Ctv",
+                size: 3.880886,
+                color: "#FDAE61",
+                Region: "Baja",
+                group: "All"
+              },
+              {
+                name: "LaV",
+                size: 3.5337565,
+                color: "#FDAE61",
+                Region: "Baja",
+                group: "All"
+              },
+              {
+                name: "Lig",
+                size: 4.731355,
+                color: "#FDAE61",
+                Region: "Baja",
+                group: "All"
+              },
+              {
+                name: "PtC",
+                size: 4.684652,
+                color: "#FDAE61",
+                Region: "Baja",
+                group: "All"
+              },
+              {
+                name: "PtP",
+                size: 10.925375,
+                color: "#FDAE61",
+                Region: "Baja",
+                group: "All"
+              },
+              {
+                name: "SLG",
+                size: 5.955645,
+                color: "#FDAE61",
+                Region: "Baja",
+                group: "All"
+              },
+              {
+                name: "SnE",
+                size: 11.82822,
+                color: "#FDAE61",
+                Region: "Baja",
+                group: "All"
+              },
+              {
+                name: "SnF",
+                size: 6.325655,
+                color: "#FDAE61",
+                Region: "Baja",
+                group: "All"
+              },
+              {
+                name: "SnI",
+                size: 5.466695,
+                color: "#FDAE61",
+                Region: "Baja",
+                group: "All"
+              },
+              {
+                name: "StR",
+                size: 6.859545,
+                color: "#FDAE61",
+                Region: "Baja",
+                group: "All"
+              },
+              {
+                name: "TsS",
+                size: 5.29057,
+                color: "#FDAE61",
+                Region: "Baja",
+                group: "All"
+              },
+              {
+                name: "CP",
+                size: 7.870725,
+                color: "#B1C3D2",
+                Region: "Sonora",
+                group: "All"
+              },
+              {
+                name: "LF",
+                size: 8.472215,
+                color: "#B1C3D2",
+                Region: "Sonora",
+                group: "All"
+              },
+              {
+                name: "PL",
+                size: 6.692795,
+                color: "#B1C3D2",
+                Region: "Sonora",
+                group: "All"
+              },
+              {
+                name: "SenBas",
+                size: 9.116705,
+                color: "#B1C3D2",
+                Region: "Sonora",
+                group: "All"
+              },
+              {
+                name: "Seri",
+                size: 2.5,
+                color: "#B1C3D2",
+                Region: "Sonora",
+                group: "All"
+              },
+              {
+                name: "SG",
+                size: 11.02753,
+                color: "#B1C3D2",
+                Region: "Sonora",
+                group: "All"
+              },
+              {
+                name: "SI",
+                size: 11.52145,
+                color: "#B1C3D2",
+                Region: "Sonora",
+                group: "All"
+              },
+              {
+                name: "SN",
+                size: 8.325785,
+                color: "#B1C3D2",
+                Region: "Sonora",
+                group: "All"
+              },
+              {
+                name: "TS",
+                size: 16.001165,
+                color: "#B1C3D2",
+                Region: "Sonora",
+                group: "All"
+              }
+            ],
+            edges: [
+              { source: 0, target: 2, weight: 9.052676 },
+              { source: 0, target: 3, weight: 9.71615 },
+              { source: 0, target: 4, weight: 12.38248 },
+              { source: 0, target: 5, weight: 6.539983 },
+              { source: 0, target: 7, weight: 7.922799 },
+              { source: 0, target: 9, weight: 6.95713 },
+              { source: 0, target: 10, weight: 6.766322 },
+              { source: 1, target: 5, weight: 2.655055 },
+              { source: 1, target: 6, weight: 1.383612 },
+              { source: 1, target: 8, weight: 2.696431 },
+              { source: 1, target: 15, weight: 6.50686 },
+              { source: 2, target: 3, weight: 12.07282 },
+              { source: 2, target: 4, weight: 12.80017 },
+              { source: 2, target: 7, weight: 8.49112 },
+              { source: 2, target: 8, weight: 10.38688 },
+              { source: 2, target: 11, weight: 8.267106 },
+              { source: 3, target: 4, weight: 14.22483 },
+              { source: 3, target: 9, weight: 9.273806 },
+              { source: 3, target: 10, weight: 9.026984 },
+              { source: 3, target: 11, weight: 12.80184 },
+              { source: 4, target: 7, weight: 12.39859 },
+              { source: 4, target: 10, weight: 11.93834 },
+              { source: 4, target: 11, weight: 12.58404 },
+              { source: 4, target: 15, weight: 13.98413 },
+              { source: 5, target: 8, weight: 2.984673 },
+              { source: 5, target: 9, weight: 4.434012 },
+              { source: 5, target: 15, weight: 6.568057 },
+              { source: 6, target: 8, weight: 2.999361 },
+              { source: 6, target: 9, weight: 4.575605 },
+              { source: 7, target: 10, weight: 7.570517 },
+              { source: 7, target: 11, weight: 9.94686 },
+              { source: 8, target: 9, weight: 4.821284 },
+              { source: 9, target: 10, weight: 7.665717 },
+              { source: 10, target: 11, weight: 10.13719 },
+              { source: 10, target: 15, weight: 9.111798 },
+              { source: 12, target: 16, weight: 2.773351 },
+              { source: 12, target: 17, weight: 3.988562 },
+              { source: 12, target: 19, weight: 4.143565 },
+              { source: 12, target: 20, weight: 4.269119 },
+              { source: 13, target: 14, weight: 2.418533 },
+              { source: 13, target: 17, weight: 2.854111 },
+              { source: 13, target: 18, weight: 3.127624 },
+              { source: 14, target: 15, weight: 9.17615 },
+              { source: 14, target: 17, weight: 3.533888 },
+              { source: 14, target: 18, weight: 2.915417 },
+              { source: 14, target: 19, weight: 4.867766 },
+              { source: 16, target: 17, weight: 3.414492 },
+              { source: 16, target: 19, weight: 3.569675 },
+              { source: 17, target: 18, weight: 3.837508 },
+              { source: 18, target: 19, weight: 4.87534 },
+              { source: 18, target: 20, weight: 4.558169 },
+              { source: 19, target: 20, weight: 4.672005 }
+            ]
+          };
+
+          //Initialize a simple force layout, using the nodes and edges in dataset
+          var force = d3
+            .forceSimulation(dataset.nodes)
+            .force(
+              "charge",
+              d3
+                .forceManyBody()
+                .strength([-120])
+                .distanceMax([400])
+            )
+            .force("link", d3.forceLink(dataset.edges))
+            .force(
+              "center",
+              d3
+                .forceCenter()
+                .x(w / 2)
+                .y(h / 2)
+            );
+
+          var colors = d3.scaleOrdinal(d3.schemeCategory10);
+
+          //Create SVG element
+          var svg = d3
+            .select("div#container")
+            .append("svg")
+            .attr("preserveAspectRatio", "xMinYMin meet")
+            .attr("viewBox", "0 0 960 600")
+            .classed("svg-content", true);
+          //            .attr("width", w)
+          //          .attr("height", h);
+
+          //Create edges as lines
+          var edges = svg
+            .selectAll("line")
+            .data(dataset.edges)
+            .enter()
+            .append("line")
+            .style("stroke", "#aaa")
+            .style("stroke-width", function(d) {
+              return d.weight / 4.0;
+            });
+
+          //Create nodes as circles
+          var nodes = svg
+            .selectAll("circle")
+            .data(dataset.nodes)
+            .enter()
+            .append("circle")
+            .attr("r", function(d) {
+              return d.size;
+            })
+            .style("fill", function(d, i) {
+              return d.color;
+            })
+            .call(
+              d3
+                .drag() //Define what to do on drag events
+                .on("start", dragStarted)
+                .on("drag", dragging)
+                .on("end", dragEnded)
+            );
+
+          //Every time the simulation "ticks", this will be called
+          force.on("tick", function() {
+            edges
+              .attr("x1", function(d) {
+                return d.source.x;
+              })
+              .attr("y1", function(d) {
+                return d.source.y;
+              })
+              .attr("x2", function(d) {
+                return d.target.x;
+              })
+              .attr("y2", function(d) {
+                return d.target.y;
+              });
+
+            nodes
+              .attr("cx", function(d) {
+                return d.x;
+              })
+              .attr("cy", function(d) {
+                return d.y;
+              });
+          });
+
+          //Define drag event functions
+          function dragStarted(d) {
+            if (!d3.event.active) force.alphaTarget(0.3).restart();
+            d.fx = d.x;
+            d.fy = d.y;
+          }
+
+          function dragging(d) {
+            d.fx = d3.event.x;
+            d.fy = d3.event.y;
+          }
+
+          function dragEnded(d) {
+            if (!d3.event.active) force.alphaTarget(0);
+            d.fx = null;
+            d.fy = null;
+          }
+        </script>
+
+        <hr />
+        <h3>Recent Posts</h3>
+      </div>
+    </div>
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://getbootstrap.com/docs/3.3/dist/js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="https://getbootstrap.com/docs/3.3/assets/js/ie10-viewport-bug-workaround.js"></script>
+  </body>
+</html>
