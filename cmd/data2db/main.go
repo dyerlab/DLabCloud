@@ -23,7 +23,7 @@ type Individual struct {
 func main() {
 	fmt.Println("data2db")
 
-	csvFile, err := os.Open("./data/chr2_sm.snp")
+	csvFile, err := os.Open("./data/chr2.umich.phased.ordered.snp")
 	if err != nil {
 		fmt.Println(err)
 	}
